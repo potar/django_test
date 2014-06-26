@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-2">
+       <a href="#/users">Users</a><br>
+       <a href="#/rooms">Rooms</a>
+    </div>
+    <div class="col-lg-10" ng-view="">
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    DYNAMIC_MODELS_APP_SETTINGS = {
+        'users_partial_view': "{% url 'dynamic_models:users_partial_view' %}",
+        'rooms_partial_view': "{% url 'dynamic_models:rooms_partial_view' %}",
+        'list_users': "{% url 'dynamic_models:list_users' %}",
+        'list_rooms': "{% url 'dynamic_models:list_rooms' %}",
+        'update_room': "{% url 'dynamic_models:update_room' %}",
+        'update_user': "{% url 'dynamic_models:update_user' %}",
+    }
+</script>
+{{ block.super }}
+{% endblock javascript %}

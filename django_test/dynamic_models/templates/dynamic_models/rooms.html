@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+
+<table class="table table-bordered">
+    <thead>
+        <th></th>
+        <th>Department</th>
+        <th>Spots</th>
+    </thead>
+    <tbody>
+{% verbatim %}
+    <tr ng-repeat="room in rooms">
+        <td>{{ $index + 1 }}</td>
+        <td editable-text="room.department" onaftersave="updateData(settings.update_room, room, 'department')">
+            {{ room.department }}
+        </td>
+        <td 
+            editable-text="room.spots" 
+            onbeforesave="intValidator($data)"
+            onaftersave="updateData(settings.update_room, room, 'spots')">{{ room.spots }}</td>
+    </tr>
+{%endverbatim%}
+    </tbody>
+</table>
+<form name="roomForm" action="" method="post">{% csrf_token %}
+    {{ form.department.label }}
+    {% render_field form.department ng-model="form.department" ng-required="true" %}
+
+    {{ form.spots.label }}
+    {% render_field form.spots ng-model="form.spots" ng-required="true" %}
+
+    <input type="submit" value="Create" ng-click="submitForm(roomForm.$valid)"/>
+</form></form>
+

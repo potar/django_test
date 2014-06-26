@@ -1,0 +1,39 @@
+{% load widget_tweaks %}
+
+<table class="table table-bordered">
+    <thead>
+        <th></th>
+        <th>Name</th>
+        <th>Paycheck</th>
+        <th>Date Joined</th>
+    </thead>
+    <tbody>
+    {% verbatim %}
+    <tr ng-repeat="user in users track by $index">
+        <td>{{ $index + 1 }}</td>
+        <td editable-text="user.name" onaftersave="updateData(settings.update_user, user, 'name')">{{ user.name }}</td>
+        <td editable-text="user.paycheck" 
+            onbeforesave="intValidator($data)"
+            onaftersave="updateData(settings.update_user, user, 'paycheck')">{{ user.paycheck }}</td>
+        <td editable-bsdate="user.date_joined"
+            onaftersave="updateData(settings.update_user, user, 'date_joined')"
+            e-datepicker-popup="dd-MMMM-yyyy">
+            {{ (user.date_joined | date:"dd/MM/yyyy") || 'empty' }}
+        </td>
+    </tr>
+    {%endverbatim%}
+    </tbody>
+</table>
+<form name="userForm" action="" method="post">{% csrf_token %}
+
+    {{ form.name.label }}
+    {% render_field form.name ng-model="form.name" ng-required="true" %}
+    {{ form.paycheck.label }}
+    {% render_field form.paycheck ng-model="form.paycheck" ng-required="true" %}
+
+    {{ form.date_joined.label }}
+    <!-- TODO: investigate why "type='text'" by default? -->
+    {% render_field form.date_joined ng-model="form.date_joined" type="date" ng-required="true" e-datepicker-popup="dd-MMMM-yyyy" %}
+
+    <input type="submit" ng-click="submitForm(userForm.$valid)" value="Create" />
+</form>
